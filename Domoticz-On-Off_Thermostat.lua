@@ -6,7 +6,8 @@ Description : This script is a simple on/off thermostat based on the roomtempera
 
 return {
    on = {
-        timer = {'every 10 minutes'
+        timer = {
+                   'every 10 minutes'
                 }
          },
 
@@ -17,20 +18,31 @@ return {
 
     execute = function(domoticz, item)
 
+        -- set to true if you want to swtich on/off the heater
+        local switchWp = true
+
         local setPointId = 146          -- Dummy thermostaat device
-        local roomTemperatureId = 42    -- Temperature measuring device
+        local roomTemperatureId = 42
         local wpSwitchId = 60           -- Heatpump_State
+        local shiftId = 82             -- Z1_Heat_Request_Temp
+
         local setPoint = domoticz.utils.round(domoticz.devices(setPointId).setPoint, 2)
 
         -- script default values settings
         local roomTemperature = tonumber(domoticz.devices(roomTemperatureId).rawData[1])
+        local wpState = 1
+        local shift = 0
+        local wpSetpointDevice = domoticz.devices(shiftId)
 
         domoticz.log('setpoint temperatuur: ' .. setPoint .. ' oC ', domoticz.LOG_DEBUG)
 
         if (roomTemperature > (setPoint + 0.2)) then
+            if (true == switchWp) then
+                wpState = 1 -- only disable the state when the WP will be switched off
                 domoticz.devices(wpSwitchId).switchOff()
             end
-        elseif (roomTemperature < (setPoint - 0.2)) then
+        elseif (roomTemperature < (setPoint + 0.2)) then
+            if (true == switchWp) then
                 domoticz.devices(wpSwitchId).switchOn()
             end
         end
