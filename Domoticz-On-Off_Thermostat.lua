@@ -1,7 +1,7 @@
 --[[
- Author				:	BazemanKM
- Adjusted     : Vandermark1977
- Description 	: This script is a simple on/off thermostat based on the roomtemperature, a setpoint and a hysteresis. 
+Author      :	BazemanKM
+Adjusted    : Vandermark1977
+Description : This script is a simple on/off thermostat based on the roomtemperature, a setpoint and a hysteresis. 
 ]]--
 
 return {
