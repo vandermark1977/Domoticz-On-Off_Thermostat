@@ -21,10 +21,10 @@ return {
         -- set to true if you want to swtich on/off the heater
         local switchWp = true
 
-        local setPointId = 146          -- Dummy thermostaat device
-        local roomTemperatureId = 42
-        local wpSwitchId = 60           -- Heatpump_State
-        local shiftId = 82             -- Z1_Heat_Request_Temp
+        local setPointId = 146            -- Dummy thermostaat device
+        local roomTemperatureId = 42      -- Temperature device
+        local wpSwitchId = 60             -- Heatpump On/Off switch
+        local shiftId = 82                -- Z1_Heat_Request_Temp
 
         local setPoint = domoticz.utils.round(domoticz.devices(setPointId).setPoint, 2)
 
