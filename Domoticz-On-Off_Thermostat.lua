@@ -7,13 +7,13 @@ Description : This script is a simple on/off thermostat based on the roomtempera
 return {
    on = {
         timer = {
-                   'every 10 minutes'
+                   'every 1 minutes'
                 }
          },
 
         logging = {
             level = domoticz.LOG_DEBUG, -- LOG_DEBUG or LOG_ERROR
-            marker = "WP: Thermostaat [ Script ]"
+            marker = "Thermostaat: "
         },
 
     execute = function(domoticz, item)
@@ -34,14 +34,12 @@ return {
         local shift = 0
         local wpSetpointDevice = domoticz.devices(shiftId)
 
-        domoticz.log('setpoint temperatuur: ' .. setPoint .. ' oC ', domoticz.LOG_DEBUG)
-
         if (roomTemperature > (setPoint + 0.2)) then
             if (true == switchWp) then
                 wpState = 1 -- only disable the state when the WP will be switched off
                 domoticz.devices(wpSwitchId).switchOff()
             end
-        elseif (roomTemperature < (setPoint + 0.2)) then
+        elseif (roomTemperature < (setPoint - 0.2)) then
             if (true == switchWp) then
                 domoticz.devices(wpSwitchId).switchOn()
             end
@@ -50,6 +48,7 @@ return {
         domoticz.devices(setPointId).updateSetPoint(setPoint) -- update dummy sensor in case of red indicator ;-)
 
         domoticz.log('WP status: ' .. wpState, domoticz.LOG_DEBUG)
-
+        domoticz.log('Doel temperatuur: ' .. setPoint .. ' oC ', domoticz.LOG_DEBUG)
+        domoticz.log('Woonkamer temperatuur: ' .. roomTemperature .. ' oC ', domoticz.LOG_DEBUG)
     end
 }
