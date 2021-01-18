@@ -28,17 +28,22 @@ return {
         local roomTemperature = tonumber(domoticz.devices(roomTemperatureId).rawData[1])
 
 
-        if (roomTemperature > (setPoint + 0.2)) then
+        if ((roomTemperature > (setPoint + 0.2)) and (domoticz.devices(wpSwitchId).state == 'On')) then
             if (true == switchWp) then
                 domoticz.devices(wpSwitchId).switchOff()
+                domoticz.notify('De warmtepomp is uitgezet door de thermostaat')
                 domoticz.log('WP UIT gezet: Temperatuur binnen is: '.. roomTemperature .. ' oC en doeltemperatuur is: '  .. setPoint .. ' oC ', domoticz.LOG_DEBUG)
             end
-        elseif (roomTemperature < (setPoint - 0.2)) then
+        elseif ((roomTemperature < (setPoint - 0.2)) and (domoticz.devices(wpSwitchId).state == 'Off')) then
             if (true == switchWp) then
                 domoticz.devices(wpSwitchId).switchOn()
                 domoticz.notify('De warmtepomp is aangezet door de thermostaat')
                 domoticz.log('WP AAN gezet: Temperatuur binnen is: '.. roomTemperature .. ' oC en doeltemperatuur is: '  .. setPoint .. ' oC ', domoticz.LOG_DEBUG)
             end
+        elseif (roomTemperature > (setPoint - 0.2)) and (roomTemperature < (setPoint + 0.2)) then
+             if (true == switchWp) then
+                domoticz.log('WP niet veranderd: Temperatuur binnen is: '.. roomTemperature .. ' oC en doeltemperatuur is: '  .. setPoint .. ' oC ', domoticz.LOG_DEBUG)
+            end    
         end
 
         domoticz.devices(setPointId).updateSetPoint(setPoint) -- update dummy sensor in case of red indicator ;-)
