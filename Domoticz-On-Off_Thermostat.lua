@@ -7,7 +7,7 @@ Description : This script is a simple on/off thermostat based on the roomtempera
 return {
    on = {
         timer = {
-                   'every 1 minutes'
+                   'every 10 minutes'
                 }
          },
 
@@ -18,11 +18,12 @@ return {
 
     execute = function(domoticz, item)
 
-        local switchWp = true             -- set to true if you want to swtich on/off the heater
-        local setPointId = 146            -- Dummy thermostaat device
-        local roomTemperatureId = 42      -- Temperature device
-        local wpSwitchId = 60             -- Heatpump On/Off switch
-        local shiftId = 82                -- Z1_Heat_Request_Temp
+        local switchWp = true           -- set to true if you want to swtich on/off the heater
+        local setPointId = 146          -- Dummy thermostaat device
+        local roomTemperatureId = 42    -- Temperature measurement
+        local wpSwitchId = 60           -- Heatpump_State
+        local shiftId = 82              -- Z1_Heat_Request_Temp
+
         local setPoint = domoticz.utils.round(domoticz.devices(setPointId).setPoint, 2)
 
         -- script default values settings
@@ -35,17 +36,17 @@ return {
             if (true == switchWp) then
                 wpState = 1 -- only disable the state when the WP will be switched off
                 domoticz.devices(wpSwitchId).switchOff()
+                domoticz.log('WP UIT gezet: Temperatuur binnen is: '.. roomTemperature .. ' oC en doeltemperatuur is: '  .. setPoint .. ' oC ', domoticz.LOG_DEBUG)
             end
         elseif (roomTemperature < (setPoint - 0.2)) then
             if (true == switchWp) then
                 domoticz.devices(wpSwitchId).switchOn()
+                domoticz.log('WP AAN gezet: Temperatuur binnen is: '.. roomTemperature .. ' oC en doeltemperatuur is: '  .. setPoint .. ' oC ', domoticz.LOG_DEBUG)
             end
         end
 
         domoticz.devices(setPointId).updateSetPoint(setPoint) -- update dummy sensor in case of red indicator ;-)
 
         domoticz.log('WP status: ' .. wpState, domoticz.LOG_DEBUG)
-        domoticz.log('Doel temperatuur: ' .. setPoint .. ' oC ', domoticz.LOG_DEBUG)
-        domoticz.log('Woonkamer temperatuur: ' .. roomTemperature .. ' oC ', domoticz.LOG_DEBUG)
     end
 }
