@@ -1,5 +1,6 @@
 --[[
-Author      : BazemanKM
+Based on original script with shift function: https://github.com/CrazyICT/panasonic-virtual-thermostat
+Author      : CrazyICT
 Adjusted    : Vandermark1977
 Description : This script is a simple on/off thermostat based on the roomtemperature, a setpoint and a hysteresis. 
                A notification is sent when heater is turned on or off
