@@ -3,7 +3,8 @@ Based on original script with shift function: https://github.com/CrazyICT/panaso
 Author      : CrazyICT
 Adjusted    : Vandermark1977
 Description : This script is a simple on/off thermostat based on the roomtemperature, a setpoint and a hysteresis. 
-               A notification is sent when heater is turned on or off
+              Extra condition is built in that during a defrost the Heatpump cannot be switched off
+              A notification is sent when heater is turned on or off
 ]]--
 
 return {
